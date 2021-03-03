@@ -2,226 +2,146 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-function Numbers(props){
-  return (
-    <button className="numbers" onClick={props.onClick} value = {props.value} >
-      {props.value}
+function Ongoing(props){
+  return(
+    <button value="Ongoing" class="tabs" onClick={props.handleClick} >
+      Ongoing
     </button>
-  );
+  )
 }
 
-function Functions(props){
-  return (
-    <button className="functions" onClick={props.onClick} value = {props.value}>
-      {props.value}
+function Upcoming(props){
+  return(
+    <button value="Upcoming" class="tabs" onClick={props.handleClick} >
+      Upcoming
     </button>
-  );
+  )
 }
 
-function Clear(props){
-  return (
-    <button className="clear" onClick={props.onClick}>
-      Clear
+function Finished(props){
+  return(
+    <button value='Finished' class="tabs" onClick={props.handleClick} >
+      Finished
     </button>
-  );
+  )
 }
 
-function Screen(props){
-  const curr = props.operator === 'NA' ? props.num1 
-                                        : props.operator === '=' ? props.num1.toString() + '='
-                                                                  : props.num2;
-  return (
-    <textarea className="screen" value = {curr} />
-  );
-}
-
-function History(props){
-  const hist = props.operator === 'NA' ? props.num1 
-                                        : props.operator === '=' ? props.hist.toString() 
-                                                                    :props.num1.toString() + props.operator + props.num2.toString();
-  return (
-    <textarea className="history" value={hist} />
-  );
-}
-
-class Calc extends React.Component{
+class AddTask extends React.Component{
   constructor(props){
     super(props);
-    this.state = {nums: [0, 0],
-                  operand: 0,
-                  operator: 'NA',
-                  hist: 'NA',
-                  isFloat: [false, false]}
-    this.renderNumber = this.renderNumber.bind(this);
-    this.renderClear = this.renderClear.bind(this);
-    this.renderFunction = this.renderFunction.bind(this);
-    this.renderScreen = this.renderScreen.bind(this);
-    this.renderHistory = this.renderHistory.bind(this);
+    this.state={type: 'Ongoing',
+                task: ''};
 
-    this.handleClear = this.handleClear.bind(this);
-    this.handleFunction = this.handleFunction.bind(this);
-    this.handleNumber = this.handleNumber.bind(this);
-    this.handleEquals = this.handleEquals.bind(this);
-    this.handleDecimal = this.handleDecimal.bind(this);
-    
+    this.handleChange = this.handleChange.bind(this);
+    this.handleAdd = this.handleAdd.bind(this);
   }
 
-  renderNumber(i){
-    return(
-      i === '.' ? <Numbers value = {i} onClick={this.handleDecimal} />
-                  : <Numbers value = {i} onClick={this.handleNumber} />
-    );
+  handleChange(e){
+    this.setState({[e.target.name]: e.target.value})
   }
 
-  renderFunction(i){
-    return(
-      i === '=' ? <Functions value = {i} onClick={this.handleEquals} />
-                  : <Functions value = {i} onClick={this.handleFunction} />
-    );
-  }
-
-  renderClear(){
-    return(
-      <Clear onClick={this.handleClear} />
-    );
-  }
-
-  renderScreen(){
-    return(
-      <Screen num1 = {this.state.nums[0]} num2 = {this.state.nums[1]} operator = {this.state.operator} />
-    );
-  }
-
-  renderHistory(){
-    return(
-      <History num1 = {this.state.nums[0]} num2 = {this.state.nums[1]} operator = {this.state.operator} hist = {this.state.hist} />
-    );
-  }
-
-  handleClear(){
-    this.setState({nums: [0, 0], operand: 0, operator: 'NA', hist: 'NA'})
-  }
-
-  handleNumber(props){
-    let num = 0;
-    if(this.state.operator === 'NA'){
-      if(this.state.isFloat[0]){
-        num = (this.state.nums[0] * 10) + parseInt(props.target.value);
-        num = num * 0.1;
-        this.setState({nums: [num, this.state.nums[1]]});
-      }
-      else{
-        num = (this.state.nums[0] * 10) + parseInt(props.target.value);
-        this.setState({nums: [num, this.state.nums[1]]});
-      }
-    }
-    else{
-      if(this.state.isFloat[1]){
-        num = (this.state.nums[1] * 10) + parseInt(props.target.value);
-        num = num * 0.1;
-        this.setState({nums: [this.state.nums[0], num]})
-      }
-      else{          
-        num = (this.state.nums[1] * 10) + parseInt(props.target.value);
-        this.setState({nums: [this.state.nums[0], num]})
-      }
-    }
-  }
-
-  handleDecimal(){
-    if(this.state.operator === 'NA'){
-      this.setState({isFloat: [true, this.state.isFloat[1]]})
-    }
-    else{
-      this.setState({isFloat: [this.state.isFloat[0], true]})
-    }
-  }
-
-  handleFunction(props){
-    if(this.state.operand === 0){
-      this.setState({operand: 1, operator: props.target.value});
-    }
-    else{
-      const numbers = this.state.nums.slice();
-      this.compute(numbers);
-      this.setState({operator: props.target.value});
-    }
-  }
-
-  handleEquals(){
-    if(this.state.operand === 1){
-      const numbers = this.state.nums.slice();
-      const prev = numbers[0].toString() + this.state.operator + numbers[1].toString()
-      this.compute(numbers);
-      this.setState({operator: '=', hist: prev});
-    }
-  }
-
-  compute(numb){
-    if(this.state.operator === '+'){
-      numb[0] = numb[0] + numb[1];
-      numb[1] = 0;
-      this.setState({nums: numb})
-    }
-    else if(this.state.operator === '-'){
-      numb[0] = numb[0] - numb[1];
-      numb[1] = 0;
-      this.setState({nums: numb})
-    }
-    else if(this.state.operator === '*'){
-      numb[0] = numb[0] * numb[1];
-      numb[1] = 0;
-      this.setState({nums: numb})
-    }
-    else if(this.state.operator === '/'){
-      numb[0] = numb[0] / numb[1];
-      numb[1] = 0;
-      this.setState({nums: numb})
-    }
+  handleAdd(e){
+    const task ={type: this.state.type,
+                  task: this.state.task}
+    {this.props.handleAdd(task)}
+    this.setState({task: ''})
   }
 
   render(){
     return(
-      <div className="calc">
-        <div className="board-row">
-          {this.renderHistory()}
+      <div>
+        <select name='type' value={this.state.type} onChange={this.handleChange} >
+          <option value='Ongoing' selected>Ongoing</option>
+          <option value='Upcoming'>Upcoming</option>
+          <option value='Finished'>Finished</option>
+        </select>
+        <br />
+        <textarea name='task' value={this.state.task} onChange={this.handleChange} />
+        <br />
+        <button value='Submit' onClick={this.handleAdd} >
+          Add Task
+        </button>
+      </div>
+    )
+}
+}
+
+class Mainframe extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {Ongoing : '',
+                  Upcoming: '',
+                  Finished: '',
+                  Current: ''}
+
+    this.handleTabs = this.handleTabs.bind(this);
+    this.renderTabs = this.renderTabs.bind(this);
+    this.renderAddTask = this.renderAddTask.bind(this);
+    this.handleAddTask = this.handleAddTask.bind(this);
+  }
+
+  handleTabs(props){
+    const up = this.state.Upcoming;
+    const on = this.state.Ongoing;
+    const fin = this.state.Finished;
+    props.target.value === 'Ongoing' ? this.setState({Current: on})
+                                          : (props.target.value === 'Upcoming' ? this.setState({Current: up})
+                                                                                  : this.setState({Current: fin}))
+  }
+
+  renderTabs(props){
+    return(
+      props === 'ongoing' ? <Ongoing handleClick={this.handleTabs} />
+                            : (props === 'upcoming' ? <Upcoming handleClick={this.handleTabs} />
+                                                      :<Finished handleClick={this.handleTabs} />)
+    )
+  }
+
+  renderAddTask(){
+    return(
+      <AddTask handleAdd={this.handleAddTask} />
+    )
+  }
+
+  handleAddTask(props){
+    const type = props.type
+    const prev = type === 'Ongoing' ? this.state.Ongoing
+                                      : (type ==='Upcoming' ? this.state.Upcoming
+                                                              : this.state.Finished)
+    prev === '' ? this.setState({[type]: props.task})
+                  : this.setState({[type]: prev + '\n' + props.task})
+  }
+
+  render(){
+    return(
+      <div>
+        <div>
+          {this.renderTabs('ongoing')}
+          {this.renderTabs('upcoming')}
+          {this.renderTabs('finished')}
         </div>
-        <div className="board-row">
-          {this.renderScreen()}
+        <br />
+        <br />
+        <br />
+        <div name = 'Current'>
+          {this.state.Current}
         </div>
-        <div className="board-row">
-          {this.renderNumber(7)}
-          {this.renderNumber(8)}
-          {this.renderNumber(9)}
-          {this.renderFunction('/')}
-        </div>
-        <div className="board-row">
-          {this.renderNumber(4)}
-          {this.renderNumber(5)}
-          {this.renderNumber(6)}
-          {this.renderFunction('*')}
-        </div>
-        <div className="board-row">
-          {this.renderNumber(1)}
-          {this.renderNumber(2)}
-          {this.renderNumber(3)}
-          {this.renderFunction('-')}
-        </div>
-        <div className="board-row">
-          {this.renderNumber(0)}
-          {this.renderNumber('.')}
-          {this.renderFunction('=')}
-          {this.renderFunction('+')}
-        </div>
-        <div className="board-row">
-          {this.renderClear()}
-        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        {this.renderAddTask()}
       </div>
     )
   }
 }
 
 ReactDOM.render(
-  <Calc />,
+  <Mainframe />,
   document.getElementById('root')
 );

@@ -1,16 +1,74 @@
+.main {
+  padding-top: 150px;
+}
+
+h1 {
+  color: peru;
+  background-color: powderblue;
+  width: 200px;
+  text-align: center;
+  margin: auto;
+  margin-bottom: 20px;
+}
+
 .tabs {
   background: rgb(228, 238, 169);
   border: 1px solid rgb(45, 24, 143);
-  float: left;
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
   height: 34px;
   padding: 2px;
   text-align: center;
-  width: 180px;
+  width: 33%;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
+}
+
+.tasks {
+  border: 1px solid rgb(45, 24, 143);
+  width: 99%;
+  height: 202px;
+}
+
+.taskType {
+  border-radius: 18px;
+  font-size: 15px;
+  margin-bottom: 15px;
+  height: 34px;
+  width: 100px;
+  background-color: rgb(228, 238, 169);
+  font-weight: bold;
+}
+
+.addNew {
+  border-radius: 18px;
+  font-size: 15px;
+  height: 34px;
+  width: 100px;
+  background-color: rgb(228, 238, 169);
+  margin-top: 13px;
+  font-weight: bold;
+}
+
+.newTask {
+  max-width: 100%;
+  min-width: 100%;
+  max-height: 132px;
+  min-height: 132px;
+}
+
+.New {
+  width: 49%;
+  float: left;
+  padding-left: 8px;
+  border-left: 2px solid #000000;
+}
+
+.Old {
+  width: 49%;
+  float: left;
+  border-right: 2px solid #000000;
 }
 
 div {

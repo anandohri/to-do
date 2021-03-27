@@ -50,15 +50,15 @@ class AddTask extends React.Component{
   render(){
     return(
       <div>
-        <select name='type' value={this.state.type} onChange={this.handleChange} >
+        <select className = 'taskType' name='type' value={this.state.type} onChange={this.handleChange} >
           <option value='Ongoing' selected>Ongoing</option>
           <option value='Upcoming'>Upcoming</option>
           <option value='Finished'>Finished</option>
         </select>
         <br />
-        <textarea name='task' value={this.state.task} onChange={this.handleChange} />
+        <textarea className = 'newTask' name='task' value={this.state.task} onChange={this.handleChange} />
         <br />
-        <button value='Submit' onClick={this.handleAdd} >
+        <button className = 'addNew' value='Submit' onClick={this.handleAdd} >
           Add Task
         </button>
       </div>
@@ -114,28 +114,19 @@ class Mainframe extends React.Component{
 
   render(){
     return(
-      <div>
-        <div>
+      <div className = 'main'>
+        <h1>Task Planner</h1>
+        <div className = 'Old' >
           {this.renderTabs('ongoing')}
           {this.renderTabs('upcoming')}
           {this.renderTabs('finished')}
+          <div className = 'tasks'>
+            {this.state.Current}
+          </div>
         </div>
-        <br />
-        <br />
-        <br />
-        <div name = 'Current'>
-          {this.state.Current}
+        <div className = 'New' >
+          {this.renderAddTask()}
         </div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        {this.renderAddTask()}
       </div>
     )
   }
